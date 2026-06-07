@@ -1,7 +1,12 @@
+import os
 import numpy as np
 import pandas as pd
 import json
 from sklearn.cluster import DBSCAN
+
+# numpy>=2.0 renamed `trapz` -> `trapezoid` and removed `trapz` in 2.x.
+# Resolve once so the engine works on both numpy 1.x and 2.x.
+_trapz = getattr(np, "trapezoid", None) or getattr(np, "trapz")
 
 class AlephPointSynthesisOS:
     """
@@ -44,7 +49,7 @@ class AlephPointSynthesisOS:
         y_manifold = np.interp(x_manifold, x_pts, y_pts)
         y_manifold = np.maximum.accumulate(y_manifold)
         
-        auc = float(np.trapz(y_manifold, x_manifold))
+        auc = float(_trapz(y_manifold, x_manifold))
         return {
             "auc": auc,
             "aleph_points": aleph_points,
@@ -63,7 +68,9 @@ if __name__ == "__main__":
     result = os_engine.synthesize(df)
     print(f"APS Synthesis Complete. AUC: {result['auc']:.4f}")
     
-    with open("C:/Projects/aleph-point-synthesis-shipped/final_certification.json", "w") as f:
+    out_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                            "final_certification.json")
+    with open(out_path, "w") as f:
         json.dump({
             "project": "Aleph-Point Synthesis",
             "status": "SHIPPED",
