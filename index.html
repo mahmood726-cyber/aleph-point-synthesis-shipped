@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Aleph-Point Synthesis | Final Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"
+            integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ"
+            crossorigin="anonymous"></script>
     <style>
         :root { --primary: #0f172a; --accent: #3b82f6; --text: #f8fafc; }
         body { font-family: 'Inter', sans-serif; margin: 0; background: var(--primary); color: var(--text); }
@@ -21,14 +23,14 @@
 </head>
 <body>
     <div class="nav">
-        <div style="font-weight: bold; font-size: 1.2em;">APS // OMEGA-TIER</div>
-        <div style="color: #94a3b8;">Final Singularity Report</div>
+        <div style="font-weight: bold; font-size: 1.2em;">APS</div>
+        <div style="color: #94a3b8;">Diagnostic SROC Synthesis</div>
     </div>
 
     <div class="hero">
-        <div class="badge">SYSTEM STATUS: OPERATIONAL</div>
+        <div class="badge">DTA SROC TOOL</div>
         <h1>Aleph-Point Synthesis</h1>
-        <p style="color: #94a3b8; font-size: 1.2em; max-width: 800px; margin: 20px auto;">Recovering diagnostic truth from fractured exascale landscapes using topological density and entropy-weighted manifolds.</p>
+        <p style="color: #94a3b8; font-size: 1.2em; max-width: 800px; margin: 20px auto;">Clustering study-level operating points and reconstructing a monotone summary ROC (SROC) curve via density-based clustering and Youden-weighted centroids.</p>
     </div>
 
     <div class="main">
@@ -39,23 +41,18 @@
 
         <div class="stat-grid" style="grid-template-columns: 1fr;">
             <div class="stat-box">
-                <div class="stat-label">THEORETICAL HORIZON (SCR)</div>
-                <div class="stat-value" style="color: #f43f5e;">0.6400</div>
-                <div style="font-size: 0.8em; color: #94a3b8; margin-top:5px;">Absolute mathematical limit of truth recovery.</div>
+                <div class="stat-label">METHOD</div>
+                <div class="stat-value" style="color: #3b82f6; font-size: 1.2em;">DBSCAN + SROC</div>
+                <div style="font-size: 0.8em; color: #94a3b8; margin-top:5px;">Density-clustered operating points, monotone SROC.</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">ROBUSTNESS GAIN</div>
-                <div class="stat-value" style="color: #3b82f6;">+38.4%</div>
-                <div style="font-size: 0.8em; color: #94a3b8; margin-top:5px;">Improvement over Bivariate models.</div>
+                <div class="stat-label">CLUSTER WEIGHTING</div>
+                <div class="stat-value" style="color: #22c55e; font-size: 1.2em;">Youden-weighted</div>
+                <div style="font-size: 0.8em; color: #94a3b8; margin-top:5px;">Centroids weighted by max(J, 0.1)^3.</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">STABILITY INDEX</div>
-                <div class="stat-value" style="color: #22c55e;">0.9999</div>
-                <div style="font-size: 0.8em; color: #94a3b8; margin-top:5px;">Cross-simulation consistency rate.</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">CERTIFICATION</div>
-                <div style="font-family: monospace; font-size: 0.9em; margin-top:10px; color: #94a3b8;">SHA256:ALEPH-OMEGA-FINAL</div>
+                <div class="stat-label">AUC</div>
+                <div style="font-size: 0.8em; color: #94a3b8; margin-top:10px;">Trapezoidal area under the monotone manifold. The chart below shows illustrative (mock) cluster data; run <code>engine.py</code> for real inputs.</div>
             </div>
         </div>
     </div>
@@ -84,7 +81,7 @@
             type: 'scatter',
             data: {
                 datasets: [
-                    { label: 'Exascale Study Cloud', data: studies, backgroundColor: 'rgba(148, 163, 184, 0.2)', pointRadius: 3 },
+                    { label: 'Study Operating Points (illustrative)', data: studies, backgroundColor: 'rgba(148, 163, 184, 0.2)', pointRadius: 3 },
                     { label: 'Aleph Points', data: alephPoints, backgroundColor: '#3b82f6', pointRadius: 8, pointStyle: 'rectRot' },
                     { label: 'Tensioned Manifold', data: manifold, type: 'line', borderColor: '#f43f5e', borderWidth: 3, fill: false, showLine: true, tension: 0.2 }
                 ]

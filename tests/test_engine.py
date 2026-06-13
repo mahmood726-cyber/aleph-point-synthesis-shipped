@@ -63,5 +63,12 @@ def test_numpy2_trapz_shim_resolves():
     assert abs(float(_trapz(np.ones_like(x), x)) - 1.0) < 1e-9
 
 
+def test_empty_input_fails_closed():
+    # Empty input previously surfaced an opaque DBSCAN ValueError; the engine
+    # now fails closed with a clear message.
+    with pytest.raises(ValueError):
+        AlephPointSynthesisOS().synthesize(pd.DataFrame({"tp": [], "fp": [], "fn": [], "tn": []}))
+
+
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-q"]))

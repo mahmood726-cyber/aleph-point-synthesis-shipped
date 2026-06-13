@@ -1,7 +1,5 @@
-import os
 import numpy as np
 import pandas as pd
-import json
 from sklearn.cluster import DBSCAN
 
 # numpy>=2.0 renamed `trapz` -> `trapezoid` and removed `trapz` in 2.x.
@@ -9,15 +7,19 @@ from sklearn.cluster import DBSCAN
 _trapz = getattr(np, "trapezoid", None) or getattr(np, "trapz")
 
 class AlephPointSynthesisOS:
-    """
-    The Definitive Diagnostic Evidence Operating System.
-    Synthesizes Topology, Entropy, and Geometry.
+    """Clustering-based diagnostic-test-accuracy (DTA) SROC synthesizer.
+
+    Groups study operating points with DBSCAN, summarises each cluster as a
+    Youden-weighted centroid, and reconstructs a monotone summary ROC curve to
+    estimate AUC. Exploratory tool, not a validated bivariate model.
     """
     def __init__(self, eps=0.12, min_samples=3):
         self.eps = eps
         self.min_samples = min_samples
 
     def synthesize(self, df):
+        if df is None or len(df) == 0:
+            raise ValueError("synthesize() requires at least one study row; got empty input.")
         tp, fp, fn, tn = df['tp']+0.5, df['fp']+0.5, df['fn']+0.5, df['tn']+0.5
         s, f = tp/(tp+fn), fp/(fp+tn)
         pts = np.column_stack([f, s])
@@ -58,23 +60,13 @@ class AlephPointSynthesisOS:
         }
 
 if __name__ == "__main__":
-    # Example usage with simulated data
+    # Example usage with illustrative data (two high-accuracy + two low-accuracy
+    # clusters of operating points).
     os_engine = AlephPointSynthesisOS()
-    # Mock data representing a fractured landscape
     df = pd.DataFrame({
         'tp': [80, 85, 20, 25], 'fp': [10, 12, 70, 75],
         'fn': [20, 15, 80, 75], 'tn': [90, 88, 30, 25]
     })
     result = os_engine.synthesize(df)
-    print(f"APS Synthesis Complete. AUC: {result['auc']:.4f}")
-    
-    out_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                            "final_certification.json")
-    with open(out_path, "w") as f:
-        json.dump({
-            "project": "Aleph-Point Synthesis",
-            "status": "SHIPPED",
-            "theoretical_limit": 0.6400,
-            "integrity": 0.9999,
-            "hash": "sha256:aleph-omega-final"
-        }, f, indent=2)
+    print(f"APS synthesis complete. AUC: {result['auc']:.4f}")
+    print(f"Aleph points (cluster centroids): {len(result['aleph_points'])}")
